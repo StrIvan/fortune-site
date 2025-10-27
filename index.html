@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Didact+Gothic&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1, viewport-fit=cover" />
+  <title>Передбачення</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <main class="card">
+    <h1>Твоє передбачення від і не тільки🤍</h1>
+    <p id="fortune" class="fortune">…</p>
+  </main>
+
+  <script type="module">
+    import { pickRandomFortune, pickDailyFortune } from "./fortunes.js";
+
+    const el = document.getElementById("fortune");
+    const params = new URLSearchParams(location.search);
+
+    // режим за замовчуванням — випадкове
+    const show = (obj) => el.textContent = obj.text;
+
+    // підтримка посилань на конкретне передбачення ?id=2
+    const idParam = params.get("id");
+    if (idParam !== null) {
+      const idx = Number(idParam);
+      const { text } = { text: (await import('./fortunes.js')).FORTUNES?.[idx] ?? "Невідоме передбачення." };
+      el.textContent = text;
+    } else {
+      show(pickRandomFortune());
+    }
+
+    document.getElementById("btn-new").onclick = () => show(pickRandomFortune());
+    document.getElementById("btn-daily").onclick = () => show(pickDailyFortune());
+
+    document.getElementById("btn-share").onclick = async () => {
+      // зафіксуємо поточне передбачення лінком ?id=<index>
+      const currentIdx = sessionStorage.getItem("prev_fortune_idx") ?? "0";
+      const url = `${location.origin}${location.pathname}?id=${currentIdx}`;
+      await navigator.clipboard.writeText(url);
+      alert("Посилання скопійовано!");
+    };
+  </script>
+</body>
+</html>
