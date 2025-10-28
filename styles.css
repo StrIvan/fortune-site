@@ -29,7 +29,8 @@ h1 {
 }
 .hands-under{
   display: block;
-  width: clamp(150px, 70%, 300px); 
+  margin-top: -50px;
+  width: 380px; 
   height: auto;
   object-fit: contain;
   opacity: 0.80;
