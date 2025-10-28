@@ -29,7 +29,7 @@ h1 {
 }
 .hands-under{
   display: block;
-  width: clamp(120px, 55%, 240px); 
+  width: clamp(150px, 70%, 300px); 
   height: auto;
   object-fit: contain;
   opacity: 0.80;
